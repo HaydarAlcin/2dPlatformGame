@@ -7,8 +7,13 @@ public class PlayerController : MonoBehaviour
     Rigidbody2D rbPlayer;
     Animator PlayerAnim;
     public float movespeed = 1f;
-
+    public float jumpForce = 1f, jumpFrequancy=1f /*ZýplamaSýklýðý*/,nextJumpTime;
     bool FacingRight = true;
+    bool iGrounded = false;
+
+    public Transform groundCheckPosition;
+    public float groundCheckRadius;
+    public LayerMask groundCheckLayer;
     void Awake()
     {
     }
@@ -25,6 +30,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         HorizontalMove();
+        OnGroundedCheck();
 
         if (rbPlayer.velocity.x<0 && FacingRight)
         {
@@ -35,6 +41,12 @@ public class PlayerController : MonoBehaviour
         else if (rbPlayer.velocity.x>0 && !FacingRight)
         {
             FlipFace();
+        }
+
+        if (Input.GetAxis("Vertical")>0 && iGrounded && nextJumpTime<Time.timeSinceLevelLoad) //Dikey deðer 0 dan büyük giriliyorsa kullanýcý tuþa basýyor demektir.
+        {
+            nextJumpTime = Time.timeSinceLevelLoad + jumpFrequancy; //Karakterin her tuþa bastýðýmýzda ayný yüksekliðe zýplamasýný saðlýyoruz.
+            Jump();
         }
     }
 
@@ -56,5 +68,17 @@ public class PlayerController : MonoBehaviour
         Vector3 tempLocalScale = transform.localScale;
         tempLocalScale.x *= -1;
         transform.localScale = tempLocalScale;
+    }
+
+    void Jump()
+    {
+        //Eðer bir kuvvet ya da hýz uygulamak istersek bunu Vectorleri kullanýp oluþturabiliriz.
+        rbPlayer.AddForce(new Vector2(0f, jumpForce));
+    }
+
+    void OnGroundedCheck()
+    {
+        iGrounded = Physics2D.OverlapCircle(groundCheckPosition.position,groundCheckRadius,groundCheckLayer);
+        PlayerAnim.SetBool("isGroundedAnim", iGrounded);
     }
 }
