@@ -1,12 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class PlayerManager : MonoBehaviour
 {
     public float health;
     public bool dead = false;
+
+    //Karakter Ölünce Kan Yapýyoruz
+    public Transform bloodParticle;
+
 
     public float bulletSpeed;
     public Transform bullet; //Mermi
@@ -18,8 +23,10 @@ public class PlayerManager : MonoBehaviour
     //CAN BARIMIZ ÝÇÝN deðiþken tanýmlýyoruz
     public Slider slider;
 
-    
-    // Start is called before the first frame update
+    //Mouse butonamý yoksa oyuna mý týklýyor bunu öðrenmek için bool deðiþkeni oluþturuyoruz.
+    bool mouseIsNotOverUI;
+
+
     void Start()
     {
         //Mermimiz Player in child i olduðundan dolayý transformumuzun 1 indexli childi olarak yapabiliyoruz.
@@ -32,7 +39,10 @@ public class PlayerManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        //Her mouse a týkladýðýmýzda ateþ etme çalýþtýðýndan dolayý buttonlara dahi týklasak karakterimiz ateþ ediyor bunun önüne geçmeliyiz.
+        mouseIsNotOverUI = EventSystem.current.currentSelectedGameObject == null;
+
+        if (Input.GetMouseButtonDown(0) && mouseIsNotOverUI)
         {
             shootBullet();
         }
@@ -41,7 +51,7 @@ public class PlayerManager : MonoBehaviour
     public void GetDamage(float damage)
     {
         Instantiate(floatingText, transform.position, Quaternion.identity).GetComponent<TextMesh>().text=damage.ToString();
-        slider.value = health;
+        
         
         if ((health-damage)>=0)
         {
@@ -51,6 +61,7 @@ public class PlayerManager : MonoBehaviour
         {
             health = 0;
         }
+        slider.value = health;
         AmIDead();
     }
 
@@ -58,7 +69,9 @@ public class PlayerManager : MonoBehaviour
     {
         if (health<=0)
         {
+            Destroy(Instantiate(bloodParticle, transform.position, Quaternion.identity),3f);
             dead = true;
+            Destroy(gameObject);
         }
     }
 
@@ -84,6 +97,7 @@ public class PlayerManager : MonoBehaviour
 
         //DAHA KOLAY YOLU eðer bu yöntemi kullanacaksak forward z eksenini gösteriyor onu deðiþtirmek gerek UNUTULMAMALI
         tempBullet.GetComponent<Rigidbody2D>().AddForce(muzzle.forward * bulletSpeed);
+        //DataManager.Instance.ShotBullet++;
 
     }
 }
