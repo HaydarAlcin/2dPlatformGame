@@ -259,6 +259,7 @@ MonoBehaviour:
   damage: 10
   colliderBusy: 0
   slider: {fileID: 3621342722092622739}
+  coinAnimation: {fileID: 51774597420362471, guid: ebf8a79644be3344b9ea1a6d20da1928, type: 3}
 --- !u!114 &940352856611073055
 MonoBehaviour:
   m_ObjectHideFlags: 0

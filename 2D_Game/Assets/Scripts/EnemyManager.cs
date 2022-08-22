@@ -12,6 +12,7 @@ public class EnemyManager : MonoBehaviour
 
     //Düþmanýn can barý için oluþturduðumuz public bir deðiþken
     public Slider slider;
+    public GameObject coinAnimation;
     
     // Start is called before the first frame update
     void Start()
@@ -80,6 +81,7 @@ public class EnemyManager : MonoBehaviour
         {
             //DataManager.Instance.EnemyKilled++;
             Destroy(gameObject);
+            Instantiate(coinAnimation, transform.position, Quaternion.identity);
         }
     }
 }

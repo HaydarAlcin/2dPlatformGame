@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class PlayerManager : MonoBehaviour
 {
     public float health;
+    public float points;
     public bool dead = false;
 
     //Karakter Ölünce Kan Yapýyoruz
@@ -34,6 +35,8 @@ public class PlayerManager : MonoBehaviour
 
         slider.maxValue = health;
         slider.value = health;
+        
+        points = 0;
     }
 
     // Update is called once per frame
