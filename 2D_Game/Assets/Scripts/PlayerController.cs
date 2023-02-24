@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -14,19 +15,17 @@ public class PlayerController : MonoBehaviour
     public Transform groundCheckPosition;
     public float groundCheckRadius;
     public LayerMask groundCheckLayer;
-    void Awake()
-    {
-    }
+    
 
 
-    // Start is called before the first frame update
+   
     void Start()
     {
         rbPlayer = this.GetComponent<Rigidbody2D>();
         PlayerAnim = this.GetComponent<Animator>();
     }
 
-    // Update is called once per frame
+    
     void Update()
     {
         HorizontalMove();
@@ -47,6 +46,12 @@ public class PlayerController : MonoBehaviour
         {
             nextJumpTime = Time.timeSinceLevelLoad + jumpFrequancy; //Karakterin her tuþa bastýðýmýzda ayný yüksekliðe zýplamasýný saðlýyoruz.
             Jump();
+        }
+
+
+        if (transform.position.y<-12)
+        {
+            SceneManager.LoadScene("InGameScene");
         }
     }
 
@@ -80,5 +85,15 @@ public class PlayerController : MonoBehaviour
     {
         iGrounded = Physics2D.OverlapCircle(groundCheckPosition.position,groundCheckRadius,groundCheckLayer);
         PlayerAnim.SetBool("isGroundedAnim", iGrounded);
+    }
+
+
+
+    public void Antrenman()
+    {
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            
+        }
     }
 }

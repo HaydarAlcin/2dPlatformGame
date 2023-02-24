@@ -24,11 +24,7 @@ public class EnemyMovement : MonoBehaviour
         rbEnemy = this.GetComponent<Rigidbody2D>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
     private void FixedUpdate()
     {
         EnemyMove();
